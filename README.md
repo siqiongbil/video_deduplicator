@@ -1,183 +1,127 @@
-# 视频文件去重工具 | Video Deduplication Tool
+# 视频去重工具 (Video Deduplicator)
 
-这是一个用于检测和删除重复视频文件的Python工具。该工具使用视频帧比较来识别重复视频，并提供交互式的删除确认机制。
+一个基于 Python 的视频文件去重工具，支持通过视频帧对比来识别重复视频。
 
-A Python tool for detecting and removing duplicate video files. This tool uses video frame comparison to identify duplicate videos and provides an interactive deletion confirmation mechanism.
+## 功能特点
 
-## 功能特点 | Features
-
-- 递归扫描指定目录及其子目录
 - 支持多种视频格式（mp4, avi, mkv, mov, wmv, flv, webm）
-- 使用视频帧比较进行重复检测
-- 智能提取关键帧（基于场景变化）
-- 保存对比帧供用户确认
-- 提供多种删除模式
-- 详细的日志记录
+- 使用视频帧感知哈希对比，更准确地识别重复视频
+- 提供图形界面和命令行两种使用模式
+- 支持批量处理和交互式确认
+- 自动保存对比帧，方便人工确认
+- 支持 Windows 和 Linux 系统
 
-- Recursively scan specified directories and subdirectories
-- Support multiple video formats (mp4, avi, mkv, mov, wmv, flv, webm)
-- Use video frame comparison for duplicate detection
-- Intelligent key frame extraction (based on scene changes)
-- Save comparison frames for user confirmation
-- Multiple deletion modes
-- Detailed logging
+## 安装说明
 
-## 安装依赖 | Installation
+### 方法一：直接下载可执行文件
+
+1. 从 [Releases](https://github.com/yourusername/video-deduplicator/releases) 页面下载最新版本
+2. 解压下载的文件
+3. 直接运行 `video_deduplicator.exe`（Windows）或 `video_deduplicator`（Linux）
+
+### 方法二：从源码安装
+
+1. 克隆仓库：
+```bash
+git clone https://github.com/yourusername/video-deduplicator.git
+cd video-deduplicator
+```
+
+2. 安装依赖：
+```bash
+pip install -r requirements.txt
+```
+
+3. 运行程序：
+```bash
+python video_deduplicator.py
+```
+
+## 使用方法
+
+### 图形界面模式
+
+1. 直接运行程序，打开图形界面
+2. 点击"浏览"选择要扫描的视频目录
+3. 设置参数：
+   - 每个视频提取的帧数（默认：5）
+   - 相似度阈值（默认：5）
+   - 是否开启预览模式
+4. 点击"开始处理"开始扫描
+5. 查看对比帧，选择要删除的文件
+6. 使用"删除选中文件"或"删除所有文件"进行删除
+
+### 命令行模式
 
 ```bash
-pip install opencv-python numpy pillow imagehash
+python video_deduplicator.py <目录路径> [选项]
 ```
 
-## 使用方法 | Usage
+选项：
+- `--dry-run`：仅显示将要删除的文件，不实际删除
+- `--frames <数量>`：每个视频提取的帧数（默认：5）
+- `--threshold <数值>`：视频相似度阈值（默认：5）
 
-1. 基本扫描（预览模式）| Basic scan (preview mode):
+示例：
 ```bash
-python video_deduplicator.py /path/to/videos
+python video_deduplicator.py ./videos --frames 10 --threshold 3
 ```
 
-2. 执行删除操作 | Execute deletion:
+## 参数说明
+
+- **帧数**：每个视频提取的关键帧数量，建议值 5-10
+- **相似度阈值**：判断视频相似的阈值，值越小要求越严格
+- **预览模式**：开启后只显示重复文件，不实际删除
+
+## 注意事项
+
+1. 程序会在视频目录下创建 `duplicate_frames_时间戳` 目录存放对比帧
+2. 删除视频时会同时删除对应的对比帧目录
+3. 建议先使用预览模式确认重复文件
+4. 大量视频处理可能需要较长时间
+5. 请确保有足够的磁盘空间存储对比帧
+
+## 常见问题
+
+1. **Q: 为什么有些明显重复的视频没有被识别？**  
+   A: 可以尝试增加帧数或降低相似度阈值
+
+2. **Q: 程序运行很慢怎么办？**  
+   A: 减少帧数可以提高处理速度，但可能影响准确性
+
+3. **Q: 对比帧目录可以删除吗？**  
+   A: 可以，程序会在删除视频时自动清理对应的对比帧目录
+
+## 开发说明
+
+### 依赖项
+
+- Python 3.6+
+- OpenCV (cv2)
+- NumPy
+- Pillow
+- imagehash
+- tqdm
+- tkinter
+
+### 构建可执行文件
+
 ```bash
-python video_deduplicator.py /path/to/videos --dry-run false
+pyinstaller video_deduplicator.spec
 ```
 
-3. 自定义参数 | Custom parameters:
-```bash
-python video_deduplicator.py /path/to/videos --frames 10 --threshold 3
-```
+## 许可证
 
-## 参数说明 | Parameters
+MIT License
 
-- `directory`: 要扫描的目录路径（必需）| Directory path to scan (required)
-- `--dry-run`: 预览模式，不实际删除文件（默认：True）| Preview mode, no actual deletion (default: True)
-- `--frames`: 每个视频提取的帧数（默认：5）| Number of frames to extract per video (default: 5)
-- `--threshold`: 视频相似度阈值（默认：5）| Video similarity threshold (default: 5)
+## 贡献
 
-## 操作流程 | Operation Process
+欢迎提交 Issue 和 Pull Request！
 
-1. 程序会在指定目录下创建时间戳命名的输出目录（如：`duplicate_frames_20240320_123456`）
+## 更新日志
 
-2. 对于每组可能的重复视频：
-   - 提取关键帧（基于场景变化）
-   - 保存对比帧到输出目录
-   - 显示视频信息（文件名、时长、大小）
-
-3. 用户可以选择以下操作模式：
-   - 逐个确认删除：对每个重复文件单独确认
-   - 批量删除所有：一次性删除所有重复文件
-   - 退出不删除：取消所有删除操作
-
-4. 删除操作：
-   - 删除重复视频文件
-   - 自动清理对应的对比帧目录
-   - 如果输出目录为空，自动删除
-
-1. The program creates a timestamp-named output directory (e.g., `duplicate_frames_20240320_123456`)
-
-2. For each potential duplicate video group:
-   - Extract key frames (based on scene changes)
-   - Save comparison frames to output directory
-   - Display video information (filename, duration, size)
-
-3. Users can choose from the following operation modes:
-   - Confirm deletion one by one: Confirm each duplicate file individually
-   - Batch delete all: Delete all duplicate files at once
-   - Exit without deletion: Cancel all deletion operations
-
-4. Deletion process:
-   - Delete duplicate video files
-   - Automatically clean up corresponding comparison frame directories
-   - Automatically delete if output directory is empty
-
-## 输出说明 | Output Description
-
-程序会在指定目录下创建以下结构：
-```
-duplicate_frames_YYYYMMDD_HHMMSS/
-├── video1_vs_video2/
-│   ├── frame_00.jpg
-│   ├── frame_01.jpg
-│   └── ...
-├── video3_vs_video4/
-│   ├── frame_00.jpg
-│   ├── frame_01.jpg
-│   └── ...
-└── ...
-```
-
-每个对比帧包含：
-- 两个视频的并排显示
-- 视频文件名
-- 视频时长
-- 文件大小
-- 帧序号
-
-The program creates the following structure in the specified directory:
-```
-duplicate_frames_YYYYMMDD_HHMMSS/
-├── video1_vs_video2/
-│   ├── frame_00.jpg
-│   ├── frame_01.jpg
-│   └── ...
-├── video3_vs_video4/
-│   ├── frame_00.jpg
-│   ├── frame_01.jpg
-│   └── ...
-└── ...
-```
-
-Each comparison frame includes:
-- Side-by-side display of two videos
-- Video filename
-- Video duration
-- File size
-- Frame number
-
-## 注意事项 | Notes
-
-1. 确保有足够的磁盘空间用于保存对比帧
-2. 删除操作不可恢复，请谨慎操作
-3. 建议先使用预览模式（--dry-run）检查结果
-4. 程序会自动处理中文文件名和特殊字符
-5. 对比帧目录会在以下情况自动删除：
-   - 用户选择不删除视频
-   - 删除操作完成后
-   - 输出目录为空时
-
-1. Ensure sufficient disk space for saving comparison frames
-2. Deletion operations cannot be undone, please proceed with caution
-3. It's recommended to use preview mode (--dry-run) first
-4. The program automatically handles Chinese filenames and special characters
-5. Comparison frame directories are automatically deleted when:
-   - User chooses not to delete videos
-   - Deletion operation is completed
-   - Output directory is empty
-
-## 错误处理 | Error Handling
-
-- 程序会记录详细的错误日志
-- 单个文件处理失败不会影响整体运行
-- 自动清理失败的操作残留文件
-
-- The program logs detailed error information
-- Individual file processing failures don't affect overall operation
-- Automatically cleans up failed operation residues
-
-## 性能说明 | Performance
-
-- 使用多线程处理视频文件
-- 智能提取关键帧减少处理时间
-- 优化图像处理提高比较效率
-
-- Uses multi-threading for video file processing
-- Intelligent key frame extraction reduces processing time
-- Optimized image processing improves comparison efficiency
-
-## 支持的视频格式 | Supported Video Formats
-
-- .mp4
-- .avi
-- .mkv
-- .mov
-- .wmv
-- .flv
-- .webm 
+### v1.0.0
+- 初始版本发布
+- 支持图形界面和命令行模式
+- 实现视频帧对比功能
+- 支持批量处理和交互确认 
