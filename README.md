@@ -23,7 +23,7 @@
 
 1. 克隆仓库：
 ```bash
-git clone https://github.com/yourusername/video-deduplicator.git
+git clone https://github.com/siqiongbil/video_deduplicator.git
 cd video-deduplicator
 ```
 
