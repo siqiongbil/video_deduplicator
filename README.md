@@ -24,7 +24,7 @@
 1. 克隆仓库：
 ```bash
 git clone https://github.com/siqiongbil/video_deduplicator.git
-cd video-deduplicator
+cd video_deduplicator
 ```
 
 2. 安装依赖：
@@ -106,9 +106,39 @@ python video_deduplicator.py ./videos --frames 10 --threshold 3
 
 ### 构建可执行文件
 
+1. 安装依赖：
+```bash
+pip install -r requirements.txt
+```
+
+2. 构建程序：
 ```bash
 pyinstaller video_deduplicator.spec
 ```
+
+3. 运行程序：
+- Windows: `dist/video_deduplicator.exe`
+- Linux: `./dist/video_deduplicator`
+
+### Linux 构建注意事项
+
+1. 安装系统依赖：
+```bash
+# Ubuntu/Debian
+sudo apt-get update
+sudo apt-get install python3-dev python3-pip python3-tk
+sudo apt-get install libopencv-dev
+sudo apt-get install upx
+
+# CentOS/RHEL
+sudo yum install python3-devel python3-pip python3-tkinter
+sudo yum install opencv-devel
+sudo yum install upx
+```
+
+2. 可能需要的额外步骤：
+- 添加执行权限：`chmod +x dist/video_deduplicator`
+- 如果缺少依赖，根据错误信息安装相应的包
 
 ## 许可证
 
@@ -124,4 +154,4 @@ MIT License
 - 初始版本发布
 - 支持图形界面和命令行模式
 - 实现视频帧对比功能
-- 支持批量处理和交互确认 
+- 支持批量处理和交互确认
