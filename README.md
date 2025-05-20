@@ -15,7 +15,7 @@
 
 ### 方法一：直接下载可执行文件
 
-1. 从 [Releases](https://github.com/yourusername/video-deduplicator/releases) 页面下载最新版本
+1. 从 [Releases]((https://github.com/siqiongbil/video_deduplicator/releases)) 页面下载最新版本
 2. 解压下载的文件
 3. 直接运行 `video_deduplicator.exe`（Windows）或 `video_deduplicator`（Linux）
 
